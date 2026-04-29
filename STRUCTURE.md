@@ -29,6 +29,10 @@ Tài liệu này mô tả chi tiết vai trò của từng thư mục trong hệ
 ---
 
 ## 📂 Frontend (`crm-frontend`)
-- **`index.html`**: Giao diện chính của Dashboard Kế toán.
-- **`app.js`**: Logic điều khiển, gọi API và render dữ liệu.
-- **`style.css`**: CSS tùy chỉnh cho giao diện hiện đại.
+Giao diện người dùng được nâng cấp lên **React + Vite** (thay cho Vanilla JS trước đây) nhằm đồng nhất kiến trúc với dự án `crm-ver1` và dễ dàng cho việc merge code sau này.
+
+- **`src/App.jsx`**: Cấu hình Router và Layout chính.
+- **`src/components/`**: Các thành phần dùng chung (Sidebar, v.v.).
+- **`src/pages/`**: Giao diện chi tiết cho từng phân hệ (Khách hàng, Hợp đồng, Hóa đơn...).
+- **`src/services/api.js`**: Logic gọi API qua Axios.
+- **`src/index.css`**: CSS tùy chỉnh cho giao diện hiện đại.
