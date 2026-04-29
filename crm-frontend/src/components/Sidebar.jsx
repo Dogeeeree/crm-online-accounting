@@ -26,22 +26,22 @@ function Sidebar() {
                 <h1>CRM Online</h1>
             </div>
             <nav>
-                <NavLink to="/dashboard" className={({ isActive }) => \`nav-item \${isActive ? 'active' : ''}\`}>
+                <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <span className="icon">📊</span> Dashboard
                 </NavLink>
-                <NavLink to="/customers" className={({ isActive }) => \`nav-item \${isActive ? 'active' : ''}\`}>
+                <NavLink to="/customers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <span className="icon">👥</span> Khách hàng
                 </NavLink>
-                <NavLink to="/contracts" className={({ isActive }) => \`nav-item \${isActive ? 'active' : ''}\`}>
+                <NavLink to="/contracts" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <span className="icon">📜</span> Hợp đồng
                 </NavLink>
-                <NavLink to="/invoices" className={({ isActive }) => \`nav-item \${isActive ? 'active' : ''}\`}>
+                <NavLink to="/invoices" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <span className="icon">🧾</span> Hóa đơn
                 </NavLink>
-                <NavLink to="/receipts" className={({ isActive }) => \`nav-item \${isActive ? 'active' : ''}\`}>
+                <NavLink to="/receipts" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <span className="icon">💰</span> Thu & Chi
                 </NavLink>
-                <NavLink to="/inventory" className={({ isActive }) => \`nav-item \${isActive ? 'active' : ''}\`}>
+                <NavLink to="/inventory" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                     <span className="icon">📦</span> Thẻ kho
                 </NavLink>
             </nav>
