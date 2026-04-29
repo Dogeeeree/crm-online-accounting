@@ -48,6 +48,7 @@ nav { display:flex; flex-direction:column; gap:4px; flex-grow:1; }
     background:none; border:none; color:var(--text-secondary); padding:10px 16px;
     text-align:left; border-radius:9999px; cursor:pointer; font-size:0.95rem;
     font-weight:400; transition:all 0.15s ease; display:flex; align-items:center; gap:12px;
+    text-decoration: none;
 }
 .nav-item:hover { background-color:var(--light-gray); color:var(--text-primary); }
 .nav-item.active { background-color:var(--light-gray); color:var(--text-primary); font-weight:500; }
