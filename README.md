@@ -71,17 +71,6 @@
 
 ---
 
-## 🤝 Phần Đóng Góp (Contributing)
-
-Chúng tôi luôn hoan nghênh sự đóng góp từ cộng đồng!
-**Điều kiện được chấp nhận Pull Request (PR):**
-1. Bạn phải Fork repo hoặc tạo một nhánh mới (`feature/ten-tinh-nang`).
-2. Code phải tuân thủ chuẩn Clean Code, viết tên biến rõ nghĩa và có chú thích (comment) ở những phần logic phức tạp.
-3. Không làm hỏng kiến trúc API hiện tại.
-4. Tạo Pull Request (PR) mô tả chi tiết mục tiêu của sự thay đổi.
-
----
-
 ## ❓ Khắc Phục Lỗi Phổ Biến & FAQ
 
 - **Lỗi `Access Denied for user 'root'@'localhost'`:**
