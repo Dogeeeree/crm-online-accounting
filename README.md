@@ -61,8 +61,9 @@
 
 ## 💡 Cách Dùng Và Ví Dụ
 
-1. **Khởi tạo dữ liệu mẫu (Seed Data):**
-   - Bạn có thể chạy script `crm-backend/seed_data.sql` trong MySQL để tạo nhanh các bản ghi mẫu (Khách hàng, Sản phẩm, Hóa đơn,...).
+1. **Khởi tạo dữ liệu (Database Setup):**
+   - Import file script `CRMOnline_Pro.sql` (nằm ở thư mục gốc) vào MySQL để tự động tạo cấu trúc CSDL và các dữ liệu mẫu đầy đủ nhất cho hệ thống.
+   - (Tùy chọn) Có thể chạy script `crm-backend/seed_data.sql` nếu chỉ muốn khởi tạo dữ liệu cơ bản (Khách hàng, Sản phẩm,...).
 
 2. **Quản lý Thu/Chi (Ví dụ):**
    - Từ màn hình Frontend, chọn chức năng "Thu/Chi".
@@ -106,27 +107,9 @@ Chúng tôi luôn hoan nghênh sự đóng góp từ cộng đồng!
 
 ---
 
-## 📞 Hỗ Trợ (Support)
-
-Nếu bạn gặp bất kỳ vấn đề nào không thể giải quyết qua FAQ, vui lòng liên hệ:
-- **Tạo Issue trực tiếp:** [Tạo thẻ Issue trên GitHub](https://github.com/Dogeeeree/crm-online-accounting/issues)
-- **Email Đội Ngũ:** support@crm-online-accounting.dev
-
----
-
-## 🏆 Sự Công Nhận (Acknowledgments)
-
-Xin gửi lời cảm ơn đặc biệt đến:
-- Đội ngũ giảng viên hướng dẫn.
-- Các nhà phát triển mã nguồn mở đã đóng góp cho Spring Framework và cộng đồng frontend web.
-
----
-
 ## 📚 Tài Liệu Tham Khảo
 - [Spring Boot Official Documentation](https://spring.io/projects/spring-boot)
 - [MDN Web Docs (Fetch API, HTML, CSS)](https://developer.mozilla.org/en-US/)
 
 ---
 
-## ⚖️ Giấy Phép (License)
-Dự án được phân phối dưới giấy phép **MIT License**. Việc sử dụng, sửa đổi, và phân phối là miễn phí miễn là ghi nhận bản quyền của tác giả ban đầu.
