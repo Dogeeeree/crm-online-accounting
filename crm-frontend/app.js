@@ -1,6 +1,6 @@
 // CRM Online — Frontend with full CRUD + Seed Data
 const API = 'http://localhost:8080/api';
-const state = { currentView:'dashboard', customers:[], contracts:[], invoices:[], receipts:[], inventory:[], products:[], backendOnline:false };
+const state = { currentView:'dashboard', customers:[], contracts:[], invoices:[], receipts:[], inventory:[], products:[], leads:[], activities:[], users:[], backendOnline:false };
 
 // === Toast ===
 function toast(msg, type='success') {
@@ -30,7 +30,7 @@ async function apiDelete(ep) {
 
 // === Navigation ===
 document.querySelectorAll('.nav-item').forEach(i => i.addEventListener('click', () => switchView(i.dataset.view)));
-const TITLES = { dashboard:'Dashboard', customers:'Khách hàng', contracts:'Hợp đồng', invoices:'Hóa đơn', receipts:'Thu & Chi', inventory:'Thẻ kho' };
+const TITLES = { dashboard:'Dashboard', leads:'Leads', customers:'Khách hàng', contracts:'Hợp đồng', invoices:'Hóa đơn', receipts:'Thu & Chi', inventory:'Thẻ kho', activities:'Hoạt động' };
 
 function switchView(v) {
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -46,7 +46,9 @@ async function loadView(v) {
     try {
         switch(v) {
             case 'dashboard': await loadDashboard(); break;
+            case 'leads': await fetchLeads(); renderLeads(); break;
             case 'customers': await fetchCustomers(); renderCustomers(); break;
+            case 'activities': await fetchActivities(); renderActivities(); break;
             case 'contracts': await fetchContracts(); renderContracts(); break;
             case 'invoices': await fetchInvoices(); renderInvoices(); break;
             case 'receipts': await fetchReceipts(); renderReceipts(); break;
@@ -57,6 +59,9 @@ async function loadView(v) {
 
 // === Fetch ===
 async function fetchCustomers() { try { state.customers = await apiGet('/customers') || []; } catch(e) { state.customers = []; } }
+async function fetchLeads() { try { state.leads = await apiGet('/leads') || []; } catch(e) { state.leads = []; } }
+async function fetchActivities() { try { state.activities = await apiGet('/hoat-dong') || []; } catch(e) { state.activities = []; } }
+async function fetchUsers() { try { state.users = await apiGet('/users/staff') || []; } catch(e) { state.users = []; } }
 async function fetchContracts() { try { state.contracts = await apiGet('/contracts') || []; } catch(e) { state.contracts = []; } }
 async function fetchInvoices() { try { state.invoices = await apiGet('/invoices') || []; } catch(e) { state.invoices = []; } }
 async function fetchReceipts() { try { state.receipts = await apiGet('/receipts-payments') || []; } catch(e) { state.receipts = []; } }
@@ -87,8 +92,40 @@ function renderCustomers() {
             <td>${c.email||'—'}</td>
             <td>${c.soDienThoai||'—'}</td>
             <td>${c.maSoThue||'—'}</td>
-            <td><button class="btn btn-sm btn-secondary" onclick="deleteCustomer(${c.id})">Xóa</button></td>
+            <td>${c.maSoThue||'—'}</td>
+            <td>
+                <button class="btn btn-sm btn-secondary" onclick="deleteCustomer(${c.id})">Xóa</button>
+                <button class="btn btn-sm btn-primary" onclick="showAddActivity('customer', ${c.id})">Note</button>
+            </td>
         </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--silver)">Chưa có dữ liệu</td></tr>';
+}
+function renderLeads() {
+    document.getElementById('lead-list').innerHTML = state.leads.map(l => `
+        <tr>
+            <td>${l.tenLead}</td>
+            <td>${l.tenCongTy||'—'}</td>
+            <td>${l.soDienThoai||'—'}</td>
+            <td>${l.email||'—'}</td>
+            <td><span class="badge ${l.tinhTrang==='Đã chuyển đổi'?'badge-done':'badge-active'}">${l.tinhTrang}</span></td>
+            <td>
+                <button class="btn btn-sm btn-primary" onclick="showAddActivity('lead', ${l.id})">Note</button>
+                <button class="btn btn-sm btn-secondary" onclick="convertLead(${l.id})" ${l.tinhTrang==='Đã chuyển đổi'?'disabled':''}>Chuyển KH</button>
+            </td>
+        </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--silver)">Chưa có dữ liệu</td></tr>';
+}
+function filterLeads() {
+    const q = document.getElementById('search-lead').value.toLowerCase();
+    const rows = document.querySelectorAll('#lead-list tr');
+    rows.forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+}
+function renderActivities() {
+    document.getElementById('activity-list').innerHTML = state.activities.map(a => `
+        <tr>
+            <td><span class="badge">${a.loaiHoatDong}</span></td>
+            <td>${a.noiDung}</td>
+            <td>${a.thoiGianThucHien ? a.thoiGianThucHien.replace('T', ' ') : '—'}</td>
+            <td>${a.leadId ? 'Lead #'+a.leadId : (a.khachHangId ? 'KH #'+a.khachHangId : '—')}</td>
+        </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--silver)">Chưa có dữ liệu</td></tr>';
 }
 function filterCustomers() {
     const q = document.getElementById('search-customer').value.toLowerCase();
@@ -139,7 +176,8 @@ function renderInventory() {
 
 // === Dashboard ===
 async function loadDashboard() {
-    await Promise.all([fetchCustomers(), fetchContracts(), fetchInvoices(), fetchReceipts(), fetchProducts(), fetchInventory()]);
+    await Promise.all([fetchCustomers(), fetchContracts(), fetchInvoices(), fetchReceipts(), fetchProducts(), fetchInventory(), fetchLeads(), fetchActivities()]);
+    document.getElementById('stat-leads').innerText = state.leads.length;
     document.getElementById('stat-customers').innerText = state.customers.length;
     document.getElementById('stat-contracts').innerText = state.contracts.length;
     document.getElementById('stat-invoices').innerText = state.invoices.length;
@@ -369,10 +407,46 @@ async function poll() {
     } catch(e) { state.backendOnline=false; document.getElementById('connection-status').innerHTML='<span class="dot" style="background:#a3a3a3"></span> Backend Offline'; }
 }
 
+// === CRUD: Leads & Activities ===
+function showAddLead() {
+    openModal('Thêm Lead mới', `
+        <div class="form-group"><label>Tên Lead</label><input name="tenLead" required class="form-control"></div>
+        <div class="form-group"><label>Công ty</label><input name="tenCongTy" class="form-control"></div>
+        <div class="form-group"><label>Email</label><input name="email" type="email" class="form-control"></div>
+        <div class="form-group"><label>Số điện thoại</label><input name="soDienThoai" class="form-control"></div>
+    `, async d => {
+        const r = await apiPost('/leads', d);
+        if (r.data) { toast('Tạo Lead thành công!'); closeModal(); switchView('leads'); }
+        else toast('Lỗi: '+(r.message||''), 'error');
+    });
+}
+async function convertLead(id) {
+    if(!confirm('Chuyển đổi Lead này thành Khách hàng chính thức?')) return;
+    const r = await apiPost('/leads/'+id+'/convert', {});
+    if(r.data) { toast('Chuyển đổi thành công!'); switchView('customers'); }
+    else toast('Lỗi: '+(r.message||''), 'error');
+}
+function showAddActivity(type, id) {
+    openModal('Ghi nhận hoạt động', `
+        <div class="form-group"><label>Loại hoạt động</label>
+            <select name="loaiHoatDong" class="form-control">
+                <option value="Call">Gọi điện</option><option value="Meeting">Họp mặt</option>
+                <option value="Email">Gửi Email</option><option value="Zalo">Chat Zalo</option>
+            </select></div>
+        <div class="form-group"><label>Nội dung</label><textarea name="noiDung" required class="form-control" rows="3"></textarea></div>
+    `, async d => {
+        const body = { loaiHoatDong:d.loaiHoatDong, noiDung:d.noiDung };
+        if(type === 'lead') body.leadId = id; else body.khachHangId = id;
+        const r = await apiPost('/hoat-dong', body);
+        if (r.data) { toast('Đã ghi lại hoạt động!'); closeModal(); switchView('activities'); }
+        else toast('Lỗi: '+(r.message||''), 'error');
+    });
+}
+
 // === Init ===
 window.onload = async () => {
     await checkBackend();
-    await Promise.all([fetchCustomers(), fetchContracts(), fetchInvoices(), fetchReceipts(), fetchProducts(), fetchInventory()]);
+    await Promise.all([fetchCustomers(), fetchContracts(), fetchInvoices(), fetchReceipts(), fetchProducts(), fetchInventory(), fetchLeads(), fetchActivities()]);
     switchView('dashboard');
     pollTimer = setInterval(poll, 5000);
 };

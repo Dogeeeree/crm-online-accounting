@@ -1,9 +1,9 @@
-package com.crm.version1.Service;
+package com.crmonline.service;
 
-import com.crm.version1.entity.KhachHang;
-import com.crm.version1.entity.Lead;
-import com.crm.version1.repository.KhachHangRepository;
-import com.crm.version1.repository.LeadRepository;
+import com.crmonline.entity.Customer;
+import com.crmonline.entity.Lead;
+import com.crmonline.repository.CustomerRepository;
+import com.crmonline.repository.LeadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class LeadService {
     private final LeadRepository leadRepository;
-    private final KhachHangRepository khachHangRepository;
+    private final CustomerRepository customerRepository;
 
     public Iterable<Lead> getAllLeads() {
         return leadRepository.findAll();
@@ -34,20 +34,17 @@ public class LeadService {
         return leadRepository.save(existing);
     }
 
-    // Nghiệp vụ: Giao việc / Phân công
     public Lead assignLead(Long leadId, Integer nhanVienId) {
         Lead lead = leadRepository.findById(leadId).orElseThrow();
         lead.setNhanVienPhuTrachId(nhanVienId);
         return leadRepository.save(lead);
     }
 
-    // Nghiệp vụ: Convert Lead -> Khách hàng chính thức
     @Transactional
-    public KhachHang convertToKhachHang(Long leadId) {
+    public Customer convertToKhachHang(Long leadId) {
         Lead lead = leadRepository.findById(leadId).orElseThrow();
 
-        KhachHang kh = new KhachHang();
-        // Generate mã KH tự động (có thể dùng UUID hoặc Sequence tùy logic của bạn)
+        Customer kh = new Customer();
         kh.setMaKhachHang("KH" + System.currentTimeMillis());
         kh.setTenKhachHang(lead.getTenLead() + (lead.getTenCongTy() != null ? " - " + lead.getTenCongTy() : ""));
         kh.setEmail(lead.getEmail());
@@ -55,10 +52,9 @@ public class LeadService {
         kh.setNhanVienPhuTrachId(lead.getNhanVienPhuTrachId());
         kh.setIsDeleted(false);
 
-        // Cập nhật trạng thái Lead sau khi convert
         lead.setTinhTrang("Đã chuyển đổi");
         leadRepository.save(lead);
 
-        return khachHangRepository.save(kh);
+        return customerRepository.save(kh);
     }
 }

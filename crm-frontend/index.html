@@ -18,8 +18,14 @@
                 <button class="nav-item active" data-view="dashboard">
                     <span class="icon">📊</span> Dashboard
                 </button>
+                <button class="nav-item" data-view="leads">
+                    <span class="icon">🎯</span> Leads
+                </button>
                 <button class="nav-item" data-view="customers">
                     <span class="icon">👥</span> Khách hàng
+                </button>
+                <button class="nav-item" data-view="activities">
+                    <span class="icon">📅</span> Hoạt động
                 </button>
                 <button class="nav-item" data-view="contracts">
                     <span class="icon">📜</span> Hợp đồng
@@ -58,6 +64,10 @@
                 <div id="dashboard-view" class="view">
                     <div class="stats-grid">
                         <div class="stat-card">
+                            <h3>Leads</h3>
+                            <p class="value" id="stat-leads">0</p>
+                        </div>
+                        <div class="stat-card">
                             <h3>Khách hàng</h3>
                             <p class="value" id="stat-customers">0</p>
                         </div>
@@ -89,6 +99,50 @@
                             <h3>Trạng thái Backend</h3>
                             <p class="value" id="stat-backend">—</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Leads View -->
+                <div id="leads-view" class="view hidden">
+                    <div class="action-bar">
+                        <input type="text" placeholder="Tìm kiếm lead..." class="search-input" id="search-lead" oninput="filterLeads()">
+                        <button class="btn btn-primary" onclick="showAddLead()"> + Thêm lead</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tên Lead</th>
+                                    <th>Công ty</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Tình trạng</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lead-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Activities View -->
+                <div id="activities-view" class="view hidden">
+                    <div class="action-bar">
+                        <h3>Lịch sử hoạt động</h3>
+                        <button class="btn btn-primary" onclick="showAddActivity()"> + Ghi nhận hoạt động</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại</th>
+                                    <th>Nội dung</th>
+                                    <th>Thời gian</th>
+                                    <th>Liên quan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activity-list"></tbody>
+                        </table>
                     </div>
                 </div>
 

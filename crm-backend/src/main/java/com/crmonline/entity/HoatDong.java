@@ -1,4 +1,4 @@
-package com.crm.version1.entity;
+package com.crmonline.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,46 +1,39 @@
-# Cấu trúc Thư mục Dự án CRMO - Kế Toán
+# Cấu trúc Thư mục Dự án CRMO - Unified
 
-Tài liệu này mô tả chi tiết vai trò của từng thư mục trong hệ thống CRM Online - Phân hệ Kế toán.
+Tài liệu này mô tả chi tiết vai trò của từng thư mục trong hệ thống CRM Online sau khi đã hợp nhất phân hệ Kế toán và Quản lý Lead/Khách hàng.
 
 ---
 
 ## 📂 Thư mục Gốc (Root)
-- **`crm-backend/`**: Chứa mã nguồn phía máy chủ (Backend) sử dụng Spring Boot (Java).
-- **`crm-frontend/`**: Chứa mã nguồn giao diện người dùng (Frontend) sử dụng HTML/CSS/JS.
-- **`CRMOnline_Pro.sql`**: Script khởi tạo toàn bộ Cơ sở dữ liệu (Bảng, Dữ liệu mẫu).
-- **`generate_crm.py`**: Script Python dùng để dựng nhanh cấu trúc project Backend.
-- **`README.md`**: Tài liệu hướng dẫn chung của dự án.
+- **`crm-backend/`**: Dự án Backend Spring Boot hợp nhất.
+- **`crm-frontend/`**: Giao diện người dùng hợp nhất (Accounting + CRM).
+- **`CRMOnline_Pro.sql`**: Script khởi tạo toàn bộ CSDL (Bao gồm Leads, Hoạt động, Hóa đơn, Thẻ kho, Users...).
+- **`README.md`**: Hướng dẫn chung.
+- **`STRUCTURE.md`**: Tài liệu cấu trúc thư mục.
 
 ---
 
 ## 📂 Backend (`crm-backend`)
-Nơi xử lý logic nghiệp vụ, quản lý cơ sở dữ liệu và cung cấp API.
+Lưu ý: Đã tích hợp đầy đủ logic từ phiên bản 1.
 
 ### 📍 `src/main/java/com/crmonline`
-- **`common/`**: Chứa các lớp dùng chung toàn hệ thống (Cấu trúc phản hồi API, Xử lý lỗi tập trung).
-- **`controller/`**: Định nghĩa các API Endpoints (Ví dụ: `/api/customers`, `/api/invoices`). Đây là nơi tiếp nhận yêu cầu từ Frontend.
-- **`dto/` (Data Transfer Objects)**: Các lớp trung gian để định dạng dữ liệu khi gửi/nhận qua API (Ví dụ: `InvoiceRequest`).
-- **`entity/`**: Các lớp ánh xạ trực tiếp xuống bảng trong Cơ sở dữ liệu (Ví dụ: `Customer`, `Contract`).
-- **`enums/`**: Các tập hợp hằng số định nghĩa trạng thái (Ví dụ: `InvoiceStatus`: Đã thanh toán, Chưa thanh toán).
-- **`repository/`**: Các Interface xử lý truy vấn dữ liệu (CRUD) vào MySQL thông qua Spring Data JPA.
-- **`service/`**: Chứa các Interface định nghĩa nghiệp vụ logic.
-    - **`impl/`**: Triển khai chi tiết các logic nghiệp vụ (Ví dụ: Tính toán công nợ khi tạo hóa đơn).
-
-### 📍 `src/main/resources`
-- **`application.properties`**: File cấu hình chính của Spring Boot (Kết nối Database, Cổng Server).
-- **`seed_data.sql`**: Script SQL nhỏ để khởi tạo dữ liệu kiểm thử cơ bản.
+- **`controller/`**: 
+    - `CustomerController`: Quản lý khách hàng chính thức.
+    - `LeadController`: Quản lý Leads tiềm năng (Hỗ trợ convert sang Khách hàng).
+    - `HoatDongController`: Ghi nhật ký tương tác (Call, Meeting...).
+    - `InvoiceController`: Quản lý hóa đơn.
+    - `ContractController`: Quản lý hợp đồng.
+    - `ReceiptPaymentController`: Quản lý phiếu thu/chi.
+    - `ProductController` & `InventoryCardController`: Quản lý kho hàng.
+- **`entity/`**: Các thực thể JPA (`Lead`, `HoatDong`, `Customer`, `Invoice`, `Product`, `User`...).
+- **`service/`**: Chứa logic xử lý nghiệp vụ phức tạp (Ví dụ: `LeadService.convertToKhachHang`).
+- **`repository/`**: Các interface truy vấn Spring Data JPA.
 
 ---
 
 ## 📂 Frontend (`crm-frontend`)
-Giao diện trực quan cho người dùng cuối.
+Giao diện Vanilla JS hợp nhất các chức năng.
 
-- **`index.html`**: Trang web chính, điểm bắt đầu của ứng dụng.
-- **`style.css`**: Định nghĩa giao diện, màu sắc, bố cục (Aesthetics).
-- **`app.js`**: Xử lý logic phía Client, gọi API từ Backend và hiển thị dữ liệu lên màn hình.
-
----
-
-## ⚙️ Thư mục khác
-- **`.gitignore`**: Khai báo các file/thư mục không cần đẩy lên GitHub (như `target/`, `.idea/`).
-- **`pom.xml`**: File quản lý thư viện và cấu hình build của Maven (Backend).
+- **`index.html`**: Giao diện Sidebar với các module: Dashboard, Leads, Khách hàng, Hoạt động, Hợp đồng, Hóa đơn, Thu chi, Thẻ kho.
+- **`app.js`**: Toàn bộ logic Fetch API và render dữ liệu cho tất cả các phân hệ.
+- **`style.css`**: Thiết kế giao diện Dashboard hiện đại.

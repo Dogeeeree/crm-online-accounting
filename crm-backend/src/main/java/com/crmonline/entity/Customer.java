@@ -14,6 +14,9 @@ public class Customer {
     private String email;
     private String soDienThoai;
     private String maSoThue;
+    private Integer nhanVienPhuTrachId;
+    private Short loaiKhachHangId;
+    private Short tinhTrangId;
     private Boolean isDeleted = false;
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
