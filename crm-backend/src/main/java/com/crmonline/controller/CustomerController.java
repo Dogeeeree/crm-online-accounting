@@ -23,19 +23,6 @@ public class CustomerController {
         return ResponseEntity.ok(ApiResponse.success("Created", customerRepository.save(customer)));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Customer>> update(@PathVariable Long id, @RequestBody Customer customer) {
-        Customer existing = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
-        existing.setTenKhachHang(customer.getTenKhachHang());
-        existing.setMaSoThue(customer.getMaSoThue());
-        existing.setEmail(customer.getEmail());
-        existing.setSoDienThoai(customer.getSoDienThoai());
-        existing.setLoaiKhachHangId(customer.getLoaiKhachHangId());
-        existing.setTinhTrangId(customer.getTinhTrangId());
-        existing.setNhanVienPhuTrachId(customer.getNhanVienPhuTrachId());
-        return ResponseEntity.ok(ApiResponse.success("Updated", customerRepository.save(existing)));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> softDelete(@PathVariable Long id) {
         Customer c = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
