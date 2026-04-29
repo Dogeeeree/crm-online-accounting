@@ -19,13 +19,6 @@
 
 ---
 
-## 📸 Trợ Giúp Trực Quan
-
-> *(Thêm hình ảnh hoặc GIF minh họa giao diện chính tại đây)*
-> ![Giao diện Dashboard](https://via.placeholder.com/800x400.png?text=Dashboard+Screenshot)
-
----
-
 ## 🛠 Phần Phụ Thuộc (Dependencies)
 
 Để khởi chạy dự án, bạn cần chuẩn bị các công cụ sau:
